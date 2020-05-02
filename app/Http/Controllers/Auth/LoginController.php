@@ -3,12 +3,17 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\JwtToken\TokenResponse;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
+    use TokenResponse;
+
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -47,5 +52,26 @@ class LoginController extends Controller
     public function adminLoginPage()
     {
         return view('auth.admin.login');
+    }
+
+    /**
+     * login the admin
+     * @throws ValidationException
+     */
+    public function adminLogin()
+    {
+        //validate incoming request
+        $this->validate(request(), [
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        $credentials = request()->only(['email', 'password']);
+
+        if (!Auth::guard('admin')->attempt($credentials)) {
+            return redirect()->back()->withErrors('Wrong credentials');
+        }
+
+        return redirect()->route('admin.home');
     }
 }

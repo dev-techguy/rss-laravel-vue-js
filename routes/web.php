@@ -24,8 +24,12 @@ Route::get('home', 'HomeController@index')->name('home');
 
 Route::group([
     'prefix' => 'admin',
-    'namespace' => 'Auth'
 ], function () {
-    Route::get('', 'LoginController@adminLoginPage')->name('admin.login');
+    Route::group([
+        'namespace' => 'Auth',
+    ], function () {
+        Route::get('', 'LoginController@adminLoginPage')->name('admin.login');
+        Route::post('', 'LoginController@adminLogin')->name('admin.login');
+    });
     Route::get('home', 'AdminController@index')->name('admin.home');
 });
