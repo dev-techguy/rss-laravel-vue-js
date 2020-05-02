@@ -14,8 +14,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group([
-    'middleware' => 'auth:api'
+//    'middleware' => 'auth:api'
 ], function () {
-
-
+    //List vacancies
+    Route::get('vacancies', 'VacanciesController@index');
+    //List Single vacancy
+    Route::get('vacancy/{id}', 'VacanciesController@show');
+    //Create new vacancy
+    Route::post('vacancy', 'VacanciesController@store');
+    //Update vacancy
+    Route::put('vacancy', 'VacanciesController@store');
+    //Delete vacancy
+    Route::delete('vacancy/{id}', 'VacanciesController@destroy');
 });

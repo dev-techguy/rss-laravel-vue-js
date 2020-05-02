@@ -22,8 +22,10 @@ window.Vue = require('vue');
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 // set the admin vue components
+Vue.component('admin-home', require('./components/admin/Home.vue').default);
 
 // set user vue components
+// Vue.component('user-login', require('./components/user/login.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
