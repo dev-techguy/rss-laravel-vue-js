@@ -8,6 +8,7 @@ Follow the steps to run and test the applications.
 - Download the app.
 - Copy *.env.example* contents to *.env*.
 - Change the *DB_USERNAME* and *DB_PASSWORD* to yours.
+- Configure *Mail configurations*.
 - Run *composer install*.
 - Run *npm install*.
 - Run *php artisan migrate:refresh --seed*.
