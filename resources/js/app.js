@@ -19,6 +19,12 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+if (process.env.MIX_APP_ENV === 'production') {
+    Vue.config.devtools = false;
+    Vue.config.debug = false;
+    Vue.config.silent = true;
+}
+
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 // set the admin vue components

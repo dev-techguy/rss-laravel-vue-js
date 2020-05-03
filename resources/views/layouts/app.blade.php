@@ -9,6 +9,8 @@
     <script>window.Laravel = {csrfToken: '{{ csrf_token() }}'}</script>
 
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <!--favicon-->
+    <link rel="icon" href="{{ asset('img/vue-laravel.jpg') }}" type="image/x-icon">
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>

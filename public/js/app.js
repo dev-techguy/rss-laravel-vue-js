@@ -54577,7 +54577,7 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/**
+/* WEBPACK VAR INJECTION */(function(process) {/**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
@@ -54595,6 +54595,12 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+if (process.env.MIX_APP_ENV === 'production') {
+  Vue.config.devtools = false;
+  Vue.config.debug = false;
+  Vue.config.silent = true;
+}
+
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]); // set the admin vue components
 
 Vue.component('admin-home', __webpack_require__(/*! ./components/admin/Home.vue */ "./resources/js/components/admin/Home.vue")["default"]); // set user vue components
@@ -54611,6 +54617,7 @@ Vue.component('welcome', __webpack_require__(/*! ./components/Welcome.vue */ "./
 var app = new Vue({
   el: '#app'
 });
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
