@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\SlugEvent;
 use App\Listeners\SlugListener;
 use App\Uuids\Uuids;
 use Illuminate\Database\Eloquent\Model;
@@ -30,8 +31,8 @@ class Vacancy extends Model
      * any save happens
      */
     protected $dispatchesEvents = [
-        'saving' => SlugListener::class,
-        'creating' => SlugListener::class,
-        'updating' => SlugListener::class,
+        'saving' => SlugEvent::class,
+        'creating' => SlugEvent::class,
+        'updating' => SlugEvent::class,
     ];
 }

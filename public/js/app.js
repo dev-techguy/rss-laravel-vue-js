@@ -2042,10 +2042,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Home",
   data: function data() {
     return {
+      secret: '6H1H7W80jqXhBa4XTC81wgqkpsgWQfld3RqvgEzFy0awDSPACxpfYkfj6nUGULv3',
       vacancies: [],
       vacancy: {
         id: '',
@@ -2071,7 +2073,12 @@ __webpack_require__.r(__webpack_exports__);
 
       var vm = this;
       page_url = page_url || '/api/vacancies';
-      fetch(page_url).then(function (res) {
+      fetch(page_url, {
+        headers: {
+          'Authorization': this.secret,
+          'content-type': 'application/json'
+        }
+      }).then(function (res) {
         return res.json();
       }).then(function (res) {
         _this.vacancies = res.data;
@@ -2103,7 +2110,11 @@ __webpack_require__.r(__webpack_exports__);
 
       if (confirm('Are you sure?')) {
         fetch("/api/vacancy/".concat(id), {
-          method: 'delete'
+          method: 'delete',
+          headers: {
+            'Authorization': this.secret,
+            'content-type': 'application/json'
+          }
         }).then(function (res) {
           return res.json();
         }).then(function (data) {
@@ -2129,6 +2140,7 @@ __webpack_require__.r(__webpack_exports__);
           method: 'post',
           body: JSON.stringify(this.vacancy),
           headers: {
+            'Authorization': this.secret,
             'content-type': 'application/json'
           }
         }).then(function (res) {
@@ -2149,6 +2161,7 @@ __webpack_require__.r(__webpack_exports__);
           method: 'put',
           body: JSON.stringify(this.vacancy),
           headers: {
+            'Authorization': this.secret,
             'content-type': 'application/json'
           }
         }).then(function (res) {

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\JwtToken\TokenResponse;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -12,7 +11,6 @@ use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    use TokenResponse;
 
     /*
     |--------------------------------------------------------------------------
@@ -62,7 +60,7 @@ class LoginController extends Controller
     {
         //validate incoming request
         $this->validate(request(), [
-            'email' => 'required|string',
+            'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
 

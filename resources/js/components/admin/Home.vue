@@ -22,7 +22,8 @@
                                                                                                     href="#"
                                                                                                     @click="fetchVacancies(pagination.prev_page_url)">Previous</a>
                     </li>
-                    <li class="page-item disabled"><a class="page-link text-dark" href="#">Page {{ pagination.current_page }} of {{ pagination.last_page }}</a></li>
+                    <li class="page-item disabled"><a class="page-link text-dark" href="#">Page {{
+                        pagination.current_page }} of {{ pagination.last_page }}</a></li>
                     <li v-bind:class="[{disabled: !pagination.next_page_url}]" class="page-item"><a class="page-link"
                                                                                                     href="#"
                                                                                                     @click="fetchVacancies(pagination.next_page_url)">Next</a>
@@ -46,6 +47,7 @@
         name: "Home",
         data() {
             return {
+                secret: '6H1H7W80jqXhBa4XTC81wgqkpsgWQfld3RqvgEzFy0awDSPACxpfYkfj6nUGULv3',
                 vacancies: [],
                 vacancy: {
                     id: '',
@@ -69,7 +71,12 @@
             fetchVacancies(page_url) {
                 let vm = this;
                 page_url = page_url || '/api/vacancies';
-                fetch(page_url)
+                fetch(page_url, {
+                    headers: {
+                        'Authorization': this.secret,
+                        'content-type': 'application/json'
+                    }
+                })
                     .then(res => res.json())
                     .then(res => {
                         this.vacancies = res.data;
@@ -96,7 +103,11 @@
             deleteVacancy(id) {
                 if (confirm('Are you sure?')) {
                     fetch(`/api/vacancy/${id}`, {
-                        method: 'delete'
+                        method: 'delete',
+                        headers: {
+                            'Authorization': this.secret,
+                            'content-type': 'application/json'
+                        }
                     })
                         .then(res => res.json())
                         .then(data => {
@@ -117,6 +128,7 @@
                         method: 'post',
                         body: JSON.stringify(this.vacancy),
                         headers: {
+                            'Authorization': this.secret,
                             'content-type': 'application/json'
                         }
                     })
@@ -135,7 +147,8 @@
                         method: 'put',
                         body: JSON.stringify(this.vacancy),
                         headers: {
-                            'content-type': 'application/json'
+                            'Authorization': this.secret,
+                            'content-type': 'application/json',
                         }
                     })
                         .then(res => res.json())

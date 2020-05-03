@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('subscribe', 'PageController@subscribe');
 
 Route::group([
-//    'middleware' => 'auth:api'
+    'middleware' => 'protect.api'
 ], function () {
     //List vacancies
     Route::get('vacancies', 'VacanciesController@index');
@@ -28,3 +28,6 @@ Route::group([
     //Delete vacancy
     Route::delete('vacancy/{id}', 'VacanciesController@destroy');
 });
+
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
