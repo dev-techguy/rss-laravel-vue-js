@@ -92,7 +92,7 @@
 
     <div class="content">
         <div class="title m-b-md">
-            Laravel {{ Faker\Factory::create()->emoji }}
+            <i class="text-danger">Laravel</i> - <i class="text-primary">VueJS</i> {{ Faker\Factory::create()->emoji }}
         </div>
         <div id="app">
             <div class="container">
