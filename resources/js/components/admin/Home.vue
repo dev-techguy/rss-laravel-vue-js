@@ -36,6 +36,10 @@
                 <h6>{{ vacancy.company }}</h6>
                 <p>{{ vacancy.description }}</p>
                 <hr>
+                <p class="float-right">
+                    <vue-moments-ago prefix="posted" suffix="ago" v-bind:date="vacancy.updated_at"></vue-moments-ago>
+                </p>
+                <hr>
                 <button @click="editVacancy(vacancy)" class="btn btn-warning mb-2">Edit</button>
                 <button @click="deleteVacancy(vacancy.id)" class="btn btn-danger">Delete</button>
             </div>
@@ -44,7 +48,13 @@
 </template>
 
 <script>
+    import VueMomentsAgo from 'vue-moments-ago'
+
     export default {
+        name: "Home",
+        components: {
+            VueMomentsAgo
+        },
         data() {
             return {
                 vacancies: [],
