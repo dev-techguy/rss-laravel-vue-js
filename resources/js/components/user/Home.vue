@@ -31,6 +31,7 @@
         name: "Home",
         data() {
             return {
+                secret: '6H1H7W80jqXhBa4XTC81wgqkpsgWQfld3RqvgEzFy0awDSPACxpfYkfj6nUGULv3',
                 vacancies: [],
                 vacancy: {
                     id: '',
@@ -55,7 +56,12 @@
             fetchVacancies(page_url) {
                 let vm = this;
                 page_url = page_url || '/api/vacancies';
-                fetch(page_url)
+                fetch(page_url, {
+                    headers: {
+                        'Authorization': this.secret,
+                        'content-type': 'application/json'
+                    }
+                })
                     .then(res => res.json())
                     .then(res => {
                         this.vacancies = res.data;

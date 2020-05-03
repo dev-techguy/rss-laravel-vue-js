@@ -2237,6 +2237,7 @@ __webpack_require__.r(__webpack_exports__);
   name: "Home",
   data: function data() {
     return {
+      secret: '6H1H7W80jqXhBa4XTC81wgqkpsgWQfld3RqvgEzFy0awDSPACxpfYkfj6nUGULv3',
       vacancies: [],
       vacancy: {
         id: '',
@@ -2263,7 +2264,12 @@ __webpack_require__.r(__webpack_exports__);
 
       var vm = this;
       page_url = page_url || '/api/vacancies';
-      fetch(page_url).then(function (res) {
+      fetch(page_url, {
+        headers: {
+          'Authorization': this.secret,
+          'content-type': 'application/json'
+        }
+      }).then(function (res) {
         return res.json();
       }).then(function (res) {
         _this.vacancies = res.data;
