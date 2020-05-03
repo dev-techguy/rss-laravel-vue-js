@@ -32,8 +32,10 @@
             </nav>
             <div class="card card-body mb-2" v-for="vacancy in vacancies" v-bind:key="vacancy.id">
                 <h3>{{ vacancy.name }}</h3>
-                <h6>{{ vacancy.company }}</h6>
+                <h6><i><b>Company</b></i> <i class="text-primary">{{ vacancy.company }}</i></h6>
                 <p>{{ vacancy.description }}</p>
+                <hr>
+                <p class="text-muted text-right"><b>Posted {{ vacancy.updated_at | diffForHumans }}</b></p>
                 <hr>
                 <button @click="editVacancy(vacancy)" class="btn btn-warning mb-2">Edit</button>
                 <button @click="deleteVacancy(vacancy.id)" class="btn btn-danger">Delete</button>
@@ -43,8 +45,20 @@
 </template>
 
 <script>
+    import dayjs from "dayjs";
+    import relativeTime from "dayjs/plugin/relativeTime";
+
     export default {
         name: "Home",
+        filters: {
+            diffForHumans: (date) => {
+                if (!date) {
+                    return null;
+                }
+
+                return dayjs(date).fromNow();
+            }
+        },
         data() {
             return {
                 secret: '6H1H7W80jqXhBa4XTC81wgqkpsgWQfld3RqvgEzFy0awDSPACxpfYkfj6nUGULv3',
@@ -54,6 +68,7 @@
                     name: '',
                     company: '',
                     description: '',
+                    updated_at: '',
                 },
                 vacancy_id: '',
                 pagination: {},
@@ -62,6 +77,7 @@
         },
         created() {
             this.fetchVacancies();
+            dayjs.extend(relativeTime);
         },
         methods: {
             /**
