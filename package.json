@@ -25,6 +25,8 @@
   },
   "dependencies": {
     "dayjs": "^1.8.26",
+    "vue-load-image": "^0.1.10",
+    "vue-loading-spinner": "^1.0.11",
     "vue-sweetalert2": "^3.0.3"
   }
 }
