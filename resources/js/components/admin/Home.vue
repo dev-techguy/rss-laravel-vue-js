@@ -47,6 +47,11 @@
 <script>
     import dayjs from "dayjs";
     import relativeTime from "dayjs/plugin/relativeTime";
+    import Vue from 'vue';
+    import 'sweetalert2/dist/sweetalert2.min.css';
+    import VueSweetalert2 from "vue-sweetalert2";
+
+    Vue.use(VueSweetalert2);
 
     export default {
         name: "Home",
@@ -117,21 +122,34 @@
              * an vacancy
              * */
             deleteVacancy(id) {
-                if (confirm('Are you sure?')) {
-                    fetch(`/api/vacancy/${id}`, {
-                        method: 'delete',
-                        headers: {
-                            'Authorization': this.secret,
-                            'content-type': 'application/json'
-                        }
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            alert('Vacancy Removed');
-                            this.fetchVacancies();
+                this.$swal({
+                    title: 'Are you sure?',
+                    text: 'You can\'t revert your action',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes Delete it!',
+                    cancelButtonText: 'No, Keep it!',
+                    showCloseButton: true,
+                    showLoaderOnConfirm: true
+                }).then((result) => {
+                    if (result.value) {
+                        fetch(`/api/vacancy/${id}`, {
+                            method: 'delete',
+                            headers: {
+                                'Authorization': this.secret,
+                                'content-type': 'application/json'
+                            }
                         })
-                        .catch(err => console.log(err))
-                }
+                            .then(res => res.json())
+                            .then(data => {
+                                this.$swal('Delete Vacancy', 'Vacancy Removed.', 'success');
+                                this.fetchVacancies();
+                            })
+                            .catch(err => this.$swal('Subscribe', 'Deletion failed. Kindly check and try again.', 'error'))
+                    } else {
+                        this.$swal('Cancelled', 'Your data is still intact', 'info')
+                    }
+                });
             },
             /**
              * function to add
@@ -139,43 +157,71 @@
              * */
             addVacancy() {
                 if (this.edit === false) {
-                    //Add
-                    fetch('/api/vacancy', {
-                        method: 'post',
-                        body: JSON.stringify(this.vacancy),
-                        headers: {
-                            'Authorization': this.secret,
-                            'content-type': 'application/json'
+                    this.$swal({
+                        title: 'Are you sure?',
+                        text: 'You can\'t revert your action',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes Add it!',
+                        cancelButtonText: 'No, Ignore it!',
+                        showCloseButton: true,
+                        showLoaderOnConfirm: true
+                    }).then((result) => {
+                        if (result.value) {
+                            fetch('/api/vacancy', {
+                                method: 'post',
+                                body: JSON.stringify(this.vacancy),
+                                headers: {
+                                    'Authorization': this.secret,
+                                    'content-type': 'application/json'
+                                }
+                            })
+                                .then(res => res.json())
+                                .then(data => {
+                                    this.vacancy.name = '';
+                                    this.vacancy.company = '';
+                                    this.vacancy.description = '';
+                                    this.$swal('New Vacancy', 'Vacancy Added.', 'success');
+                                    this.fetchVacancies();
+                                })
+                                .catch(err => this.$swal('Subscribe', 'Creation failed. Kindly check and try again.', 'error'))
+                        } else {
+                            this.$swal('Cancelled', 'Your data is still intact', 'info')
                         }
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            this.vacancy.name = '';
-                            this.vacancy.company = '';
-                            this.vacancy.description = '';
-                            alert('Vacancy Added');
-                            this.fetchVacancies();
-                        })
-                        .catch(err => console.log(err))
+                    });
                 } else {
-                    //Update
-                    fetch('/api/vacancy', {
-                        method: 'put',
-                        body: JSON.stringify(this.vacancy),
-                        headers: {
-                            'Authorization': this.secret,
-                            'content-type': 'application/json',
+                    this.$swal({
+                        title: 'Are you sure?',
+                        text: 'You can\'t revert your action',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes Update it!',
+                        cancelButtonText: 'No, Keep it!',
+                        showCloseButton: true,
+                        showLoaderOnConfirm: true
+                    }).then((result) => {
+                        if (result.value) {
+                            fetch('/api/vacancy', {
+                                method: 'put',
+                                body: JSON.stringify(this.vacancy),
+                                headers: {
+                                    'Authorization': this.secret,
+                                    'content-type': 'application/json',
+                                }
+                            })
+                                .then(res => res.json())
+                                .then(data => {
+                                    this.vacancy.name = '';
+                                    this.vacancy.company = '';
+                                    this.vacancy.description = '';
+                                    this.$swal('Update Vacancy', 'Vacancy Updated.', 'success');
+                                    this.fetchVacancies();
+                                })
+                                .catch(err => this.$swal('Subscribe', 'Updating failed. Kindly check and try again.', 'error'))
+                        } else {
+                            this.$swal('Cancelled', 'Your data is still intact', 'info')
                         }
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            this.vacancy.name = '';
-                            this.vacancy.company = '';
-                            this.vacancy.description = '';
-                            alert('Vacancy Updated');
-                            this.fetchVacancies();
-                        })
-                        .catch(err => console.log(err))
+                    });
                 }
             },
             /**

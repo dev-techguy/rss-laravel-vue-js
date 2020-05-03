@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Vacancy;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
@@ -24,7 +25,7 @@ class ApiTest extends TestCase
             'content-type' => 'application/json'
         ])->json('GET', '/api/vacancies');
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     /**
@@ -40,7 +41,7 @@ class ApiTest extends TestCase
             'content-type' => 'application/json'
         ])->json('GET', '/api/vacancy/' . $vacancy_id);
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     /**
@@ -59,7 +60,7 @@ class ApiTest extends TestCase
             'description' => $this->faker->realText(500),
         ]);
 
-        $response->assertStatus(201);
+        $response->assertStatus(Response::HTTP_CREATED);
     }
 
     /**
@@ -80,7 +81,7 @@ class ApiTest extends TestCase
             'description' => $this->faker->realText(500),
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     /**
@@ -96,6 +97,6 @@ class ApiTest extends TestCase
             'content-type' => 'application/json'
         ])->json('DELETE', '/api/vacancy/' . $vacancy_id);
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
     }
 }

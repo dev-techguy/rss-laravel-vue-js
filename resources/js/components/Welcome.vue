@@ -15,6 +15,12 @@
 </template>
 
 <script>
+    import Vue from 'vue';
+    import 'sweetalert2/dist/sweetalert2.min.css';
+    import VueSweetalert2 from "vue-sweetalert2";
+
+    Vue.use(VueSweetalert2);
+
     export default {
         name: "Welcome",
         data() {
@@ -26,19 +32,34 @@
         },
         methods: {
             subscribeUser() {
-                fetch('/api/subscribe', {
-                    method: 'post',
-                    body: JSON.stringify(this.subscribe),
-                    headers: {
-                        'content-type': 'application/json'
+                this.$swal({
+                    title: 'Are you sure?',
+                    text: 'You can\'t revert your action',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes Subscribe it!',
+                    cancelButtonText: 'No, Ignore it!',
+                    showCloseButton: true,
+                    showLoaderOnConfirm: true
+                }).then((result) => {
+                    if (result.value) {
+                        fetch('/api/subscribe', {
+                            method: 'post',
+                            body: JSON.stringify(this.subscribe),
+                            headers: {
+                                'content-type': 'application/json'
+                            }
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                this.subscribe.email = '';
+                                this.$swal('Subscribe', 'You have successfully subscribed, we will keep you updated on job search. Thank you.', 'success');
+                            })
+                            .catch(err => this.$swal('Subscribe', 'Subscription failed. Kindly check your email.', 'error'))
+                    } else {
+                        this.$swal('Cancelled', 'Your have canceled subscription', 'info')
                     }
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        this.subscribe.email = '';
-                        alert('You have successfully subscribed, we will keep you updated on job search. Thank you.');
-                    })
-                    .catch(err => console.log(err))
+                });
             }
         }
     }

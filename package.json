@@ -24,6 +24,7 @@
     "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
-    "dayjs": "^1.8.26"
+    "dayjs": "^1.8.26",
+    "vue-sweetalert2": "^3.0.3"
   }
 }
