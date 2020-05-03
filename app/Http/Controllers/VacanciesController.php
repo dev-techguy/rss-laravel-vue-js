@@ -20,7 +20,8 @@ class VacanciesController extends Controller
     public function index()
     {
         //fetch vacancies
-        $articles = Vacancy::query()->latest()->paginate(5);
+        $articles = Vacancy::query()->latest('updated_at')->paginate(5);
+
 
         //return vacancies as collection of resource
         return API::collection($articles)->response()->setStatusCode(Response::HTTP_OK);
