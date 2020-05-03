@@ -27,6 +27,9 @@ Vue.component('admin-home', require('./components/admin/Home.vue').default);
 // set user vue components
 Vue.component('user-home', require('./components/user/Home.vue').default);
 
+//index vue components
+Vue.component('welcome', require('./components/Welcome.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
