@@ -92,7 +92,7 @@
 
     <div class="content">
         <div class="title m-b-md">
-            Laravel
+            Laravel {{ Faker\Factory::create()->emoji }}
         </div>
         <div id="app">
             <div class="container">
