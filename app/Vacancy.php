@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Events\SlugEvent;
-use App\Listeners\SlugListener;
 use App\Uuids\Uuids;
 use Illuminate\Database\Eloquent\Model;
 

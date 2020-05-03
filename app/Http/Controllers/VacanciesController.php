@@ -8,7 +8,6 @@ use App\Vacancy;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class VacanciesController extends Controller
@@ -16,7 +15,7 @@ class VacanciesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return JsonResponse|object
      */
     public function index()
     {
@@ -24,7 +23,7 @@ class VacanciesController extends Controller
         $articles = Vacancy::query()->latest()->paginate(5);
 
         //return vacancies as collection of resource
-        return API::collection($articles);
+        return API::collection($articles)->response()->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -54,7 +53,11 @@ class VacanciesController extends Controller
         $vacancy->description = $request->description;
 
         if ($vacancy->save())
-            return (new API($vacancy))->response()->setStatusCode(Response::HTTP_OK);
+            if ($request->isMethod('put')) {
+                return (new API($vacancy))->response()->setStatusCode(Response::HTTP_OK);
+            } else {
+                return (new API($vacancy))->response()->setStatusCode(Response::HTTP_CREATED);
+            }
 
         return (new API([
             'Bad GateWay',
@@ -102,11 +105,11 @@ class VacanciesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param string $id
      * @return JsonResponse|object
      * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
         //fetch single article
         $vacancy = Vacancy::query()->findOrFail($id);
