@@ -2,6 +2,13 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <h2 class="text-center">Vacancies</h2>
+            <div v-if="loading">
+                <center>
+                    <p class="vertical-center">
+                        <circle10></circle10>
+                    </p>
+                </center>
+            </div>
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li v-bind:class="[{disabled: !pagination.prev_page_url}]" class="page-item"><a class="page-link"
@@ -31,9 +38,13 @@
 <script>
     import dayjs from 'dayjs';
     import relativeTime from 'dayjs/plugin/relativeTime';
+    import {Circle10} from 'vue-loading-spinner';
 
     export default {
         name: "Home",
+        components: {
+            Circle10
+        },
         filters: {
             diffForHumans: (date) => {
                 if (!date) {
@@ -45,6 +56,7 @@
         },
         data() {
             return {
+                loading: false,
                 secret: '6H1H7W80jqXhBa4XTC81wgqkpsgWQfld3RqvgEzFy0awDSPACxpfYkfj6nUGULv3',
                 vacancies: [],
                 vacancy: {
@@ -70,6 +82,7 @@
              * */
             fetchVacancies(page_url) {
                 let vm = this;
+                this.loading = true;
                 page_url = page_url || '/api/vacancies';
                 fetch(page_url, {
                     headers: {
@@ -80,9 +93,14 @@
                     .then(res => res.json())
                     .then(res => {
                         this.vacancies = res.data;
+                        this.loading = false;
                         vm.makePagination(res.meta, res.links);
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => {
+                        this.loading = false;
+                        this.$swal('Loading Failed', 'Failed to load data.', 'error');
+                        console.log(err);
+                    })
             },
             /**
              * function to set pagination

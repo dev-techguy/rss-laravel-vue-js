@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\VacancyEvent;
 use App\Http\Requests\VacancyRequest;
 use App\Http\Resources\API;
 use App\Vacancy;
@@ -20,7 +21,7 @@ class VacanciesController extends Controller
     public function index()
     {
         //fetch vacancies
-        $articles = Vacancy::query()->latest('updated_at')->paginate(5);
+        $articles = Vacancy::query()->latest('updated_at')->paginate(50);
 
 
         //return vacancies as collection of resource
@@ -57,6 +58,13 @@ class VacanciesController extends Controller
             if ($request->isMethod('put')) {
                 return (new API($vacancy))->response()->setStatusCode(Response::HTTP_OK);
             } else {
+                // trigger vacancy alert
+                event((new VacancyEvent(
+                    $request->name,
+                    $request->company,
+                    $request->description
+                )));
+
                 return (new API($vacancy))->response()->setStatusCode(Response::HTTP_CREATED);
             }
 

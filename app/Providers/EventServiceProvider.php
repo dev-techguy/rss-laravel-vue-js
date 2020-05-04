@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Events\SlugEvent;
+use App\Events\VacancyEvent;
 use App\Listeners\SlugListener;
+use App\Listeners\VacancyListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -21,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         SlugEvent::class => [
             SlugListener::class,
+        ],
+        VacancyEvent::class => [
+            VacancyListener::class,
         ],
     ];
 

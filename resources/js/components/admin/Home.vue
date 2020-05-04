@@ -2,6 +2,13 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <h2 class="text-center">Vacancies</h2>
+            <div v-if="loading">
+                <center>
+                    <p class="vertical-center">
+                        <circle10></circle10>
+                    </p>
+                </center>
+            </div>
             <form @submit.prevent="addVacancy()" class="mb-3">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Vacancy Name" v-model="vacancy.name" required>
@@ -50,11 +57,16 @@
     import Vue from 'vue';
     import 'sweetalert2/dist/sweetalert2.min.css';
     import VueSweetalert2 from "vue-sweetalert2";
+    import {Circle10} from 'vue-loading-spinner';
+
 
     Vue.use(VueSweetalert2);
 
     export default {
         name: "Home",
+        components: {
+            Circle10
+        },
         filters: {
             diffForHumans: (date) => {
                 if (!date) {
@@ -66,6 +78,7 @@
         },
         data() {
             return {
+                loading: false,
                 secret: '6H1H7W80jqXhBa4XTC81wgqkpsgWQfld3RqvgEzFy0awDSPACxpfYkfj6nUGULv3',
                 vacancies: [],
                 vacancy: {
@@ -91,6 +104,7 @@
              * */
             fetchVacancies(page_url) {
                 let vm = this;
+                this.loading = true;
                 page_url = page_url || '/api/vacancies';
                 fetch(page_url, {
                     headers: {
@@ -100,10 +114,15 @@
                 })
                     .then(res => res.json())
                     .then(res => {
+                        this.loading = false;
                         this.vacancies = res.data;
                         vm.makePagination(res.meta, res.links);
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => {
+                        this.loading = false;
+                        this.$swal('Loading Failed', 'Failed to load data.', 'error');
+                        console.log(err);
+                    })
             },
             /**
              * function to set pagination
@@ -133,6 +152,7 @@
                     showLoaderOnConfirm: true
                 }).then((result) => {
                     if (result.value) {
+                        this.loading = true;
                         fetch(`/api/vacancy/${id}`, {
                             method: 'delete',
                             headers: {
@@ -142,10 +162,14 @@
                         })
                             .then(res => res.json())
                             .then(data => {
-                                this.$swal('Delete Vacancy', 'Vacancy Removed.', 'success');
+                                this.loading = false;
+                                this.$swal('Vacancy Deletion', 'Vacancy Removed.', 'success');
                                 this.fetchVacancies();
                             })
-                            .catch(err => this.$swal('Subscribe', 'Deletion failed. Kindly check and try again.', 'error'))
+                            .catch(err => {
+                                this.loading = false;
+                                this.$swal('Vacancy', 'Deletion failed. Kindly check and try again.', 'error');
+                            })
                     } else {
                         this.$swal('Cancelled', 'Your data is still intact', 'info')
                     }
@@ -168,6 +192,7 @@
                         showLoaderOnConfirm: true
                     }).then((result) => {
                         if (result.value) {
+                            this.loading = true;
                             fetch('/api/vacancy', {
                                 method: 'post',
                                 body: JSON.stringify(this.vacancy),
@@ -181,10 +206,14 @@
                                     this.vacancy.name = '';
                                     this.vacancy.company = '';
                                     this.vacancy.description = '';
+                                    this.loading = false;
                                     this.$swal('New Vacancy', 'Vacancy Added.', 'success');
                                     this.fetchVacancies();
                                 })
-                                .catch(err => this.$swal('Subscribe', 'Creation failed. Kindly check and try again.', 'error'))
+                                .catch(err => {
+                                    this.loading = false;
+                                    this.$swal('Vacancy', 'Creation failed. Kindly check and try again.', 'error');
+                                })
                         } else {
                             this.$swal('Cancelled', 'Your data is still intact', 'info')
                         }
@@ -201,6 +230,7 @@
                         showLoaderOnConfirm: true
                     }).then((result) => {
                         if (result.value) {
+                            this.loading = true;
                             fetch('/api/vacancy', {
                                 method: 'put',
                                 body: JSON.stringify(this.vacancy),
@@ -214,10 +244,14 @@
                                     this.vacancy.name = '';
                                     this.vacancy.company = '';
                                     this.vacancy.description = '';
+                                    this.loading = false;
                                     this.$swal('Update Vacancy', 'Vacancy Updated.', 'success');
                                     this.fetchVacancies();
                                 })
-                                .catch(err => this.$swal('Subscribe', 'Updating failed. Kindly check and try again.', 'error'))
+                                .catch(err => {
+                                    this.loading = false;
+                                    this.$swal('Vacancy', 'Updating failed. Kindly check and try again.', 'error');
+                                })
                         } else {
                             this.$swal('Cancelled', 'Your data is still intact', 'info')
                         }
@@ -240,3 +274,12 @@
         }
     }
 </script>
+<style scoped>
+    .vertical-center {
+        /*margin: 0;*/
+        /*position: absolute;*/
+        /*top: 50%;*/
+        /*-ms-transform: translateY(-50%);*/
+        /*transform: translateY(-50%);*/
+    }
+</style>
